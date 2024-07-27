@@ -5,3 +5,6 @@ install:
 
 connect:
 	python snowflake_connection.py
+
+recommend:
+	python get_recommended_songs.py
