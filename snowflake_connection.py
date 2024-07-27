@@ -5,9 +5,9 @@ import snowflake.connector
 USER = os.environ["SNOWFLAKE_USERNAME"]
 PASSWORD = os.environ["SNOWFLAKE_PASSWORD"]
 ACCOUNT = os.environ["SNOWFLAKE_ACCOUNT"]
-WAREHOUSE = 'top_ten_thousand_songs_warehouse'
-DATABASE = 'top_ten_thousand_songs_database'
-SCHEMA = 'top_ten_thousand_songs_schema'
+WAREHOUSE = 'recommended_songs_warehouse'
+DATABASE = 'recommended_songs_database'
+SCHEMA = 'recommended_songs_schema'
 
 if __name__ == "__main__":
     # Establish a connection
