@@ -1,50 +1,83 @@
 import os
+from typing import List, Dict
+from dataclasses import dataclass, fields
+from textwrap import dedent
 import snowflake.connector
+from snowflake.connector import SnowflakeConnection
+from snowflake.connector.cursor import SnowflakeCursor
 
-# Replace these variables with your actual Snowflake account details
-USER = os.environ["SNOWFLAKE_USERNAME"]
-PASSWORD = os.environ["SNOWFLAKE_PASSWORD"]
-ACCOUNT = os.environ["SNOWFLAKE_ACCOUNT"]
-WAREHOUSE = 'recommended_songs_warehouse'
-DATABASE = 'recommended_songs_database'
-SCHEMA = 'recommended_songs_schema'
+from get_recommended_songs import Song
+
+
+@dataclass
+class SnowflakeConfig:
+    user: str
+    password: str
+    account: str
+    warehouse: str
+    database: str
+    schema: str
+
+
+PYTHON_TO_SQL_TYPE_MAPPING: Dict[type, str] = {
+    str: "VARCHAR(255)",
+    int: "INT",
+    List[str]: "TEXT",
+}
 
 if __name__ == "__main__":
+    # Configure Snowflake parameters
+    config = SnowflakeConfig(
+        user=os.environ["SNOWFLAKE_USERNAME"],
+        password=os.environ["SNOWFLAKE_PASSWORD"],
+        account=os.environ["SNOWFLAKE_ACCOUNT"],
+        warehouse="recommended_songs_warehouse",
+        database="recommended_songs_database",
+        schema="recommended_songs_schema",
+    )
+    
     # Establish a connection
-    conn = snowflake.connector.connect(
-        user=USER,
-        password=PASSWORD,
-        account=ACCOUNT,
-        warehouse=WAREHOUSE,
-        database=DATABASE,
-        schema=SCHEMA
+    connection: SnowflakeConnection = snowflake.connector.connect(
+        user=config.user,
+        password=config.password,
+        account=config.account,
+        warehouse=config.warehouse,
+        database=config.database,
+        schema=config.schema,
     )
 
     # Create a cursor object
-    cur = conn.cursor()
+    cursor: SnowflakeCursor = connection.cursor()
 
     # Create a database
-    cur.execute(f"CREATE DATABASE IF NOT EXISTS {DATABASE}")
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {config.database}")
 
     # Create a schema
-    cur.execute(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}")
+    cursor.execute(f"CREATE SCHEMA IF NOT EXISTS {config.schema}")
 
     # Use the database and schema
-    cur.execute(f"USE DATABASE {DATABASE}")
-    cur.execute(f"USE SCHEMA {SCHEMA}")
+    cursor.execute(f"USE DATABASE {config.database}")
+    cursor.execute(f"USE SCHEMA {config.schema}")
 
     # Create a table
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS my_table (
-            id INT AUTOINCREMENT PRIMARY KEY,
-            name STRING,
-            age INT
-        )
+    for field in fields(Song):
+        print(f"{field.name} {field.type}")
+    fields_list: str = ",\n\t".join(
+        f"{field.name} {PYTHON_TO_SQL_TYPE_MAPPING[field.type]}" for field in fields(Song)
+    )
+    print(f"fields list: {fields_list}")
+    create_table_query: str = dedent(f"""
+    CREATE TABLE IF NOT EXISTS Songs (
+    \t{fields_list}
+    );
     """)
+    print(f"create_table_query:\n{create_table_query}")
+    cursor.execute(create_table_query)
+    print("Table created successfully.")
 
     # Commit the transaction
-    conn.commit()
+    connection.commit()
 
     # Close the cursor and connection
-    cur.close()
-    conn.close()
+    cursor.close()
+    connection.close()

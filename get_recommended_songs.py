@@ -1,9 +1,19 @@
 import os
-from typing import Dict, List
+from typing import List, Dict
+from dataclasses import dataclass
 import pandas as pd
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+
+
+@dataclass
+class Song:
+    song_name: str
+    song_url: str
+    song_popularity: int
+    artist_names: List[str]
+    artist_urls: List[str]
 
 
 SEED_ARTISTS: Dict[str, str] = {
@@ -36,20 +46,15 @@ if __name__ == "__main__":
         seed_artists=list(SEED_ARTISTS.values()),
         limit=100,
     )["tracks"]
-    recommended_songs_dict: Dict[str, List] = {
-        "song name": [],
-        "song URL": [],
-        "song popularity": [],
-        "artist names": [],
-        "artist URLs": [],
-    }
+    songs: List[Song] = []
     for recommended_song in recommended_songs:
-        print(f"recommended song: {recommended_song}")
-        recommended_songs_dict["song name"].append(recommended_song["name"])
-        recommended_songs_dict["song URL"].append(recommended_song["external_urls"]["spotify"])
-        recommended_songs_dict["song popularity"].append(recommended_song["popularity"])
-        recommended_songs_dict["artist names"].append([artist["name"] for artist in recommended_song["artists"]])
-        recommended_songs_dict["artist URLs"].append([artist["external_urls"]["spotify"] for artist in recommended_song["artists"]])
-    recommended_songs_df = pd.DataFrame.from_dict(recommended_songs_dict)
+        songs.append(Song(
+            song_name=recommended_song["name"],
+            song_url=recommended_song["external_urls"]["spotify"],
+            song_popularity=recommended_song["popularity"],
+            artist_names=[artist["name"] for artist in recommended_song["artists"]],
+            artist_urls=[artist["external_urls"]["spotify"] for artist in recommended_song["artists"]],
+        ))
+    recommended_songs_df = pd.DataFrame([song.__dict__ for song in songs])
 
     print(f"Recommended songs df:\n{recommended_songs_df}")
