@@ -1,8 +1,8 @@
 # `snowflake-demo-app`
-With Snowflake's help, I now know the most popular 10,000 songs on Spotify every morning when I wake up!
+Based on your 5 favorite artists/genres/songs, here are the 100 songs that you're likely to also enjoy!
 
 ## Why (purpose)
-To always know which 10,000 songs are the most popular on Spotify and how they're related to one another 🔎 🤨
+To always have 100 songs that you're like to enjoy and know how they're related to one another 🔎 🤨
 
 ## What (requirements)
 - **Data Warehouse:** Structured data of the 10,000 most popular songs on Spotify
@@ -13,7 +13,7 @@ To always know which 10,000 songs are the most popular on Spotify and how they'r
 
 ## How (implementation)
 - [x] version control: Git, GitHub
-- [ ] backend: Python, [Spotipy](https://github.com/spotipy-dev/spotipy)
+- [ ] backend: Python, [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
 - [ ] frontend: TBD
 - [ ] CI/CD: GitHub Actions
   - [ ] linting: flake8
