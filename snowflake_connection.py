@@ -1,7 +1,7 @@
 import os
+import pandas as pd
 from typing import List, Dict
-from dataclasses import dataclass, fields
-from pandas import DataFrame
+from dataclasses import fields
 import snowflake.connector
 from snowflake.connector import SnowflakeConnection
 from snowflake.connector.cursor import SnowflakeCursor
@@ -12,24 +12,20 @@ from spotify_helper_functions import (
     SPOTIFY_API_CLIENT,
     SEED_ARTISTS,
     get_recommended_songs_based_on_artists,
+    SEED_TRACKS,
+    get_recommended_songs_based_on_other_songs,
     construct_recommended_songs_dataframe,
 )
 from sql_helper_functions import (
+    SnowflakeConfig,
+    create_and_use_snowflake_warehouse,
+    create_and_use_snowflake_database,
+    create_and_use_snowflake_schema,
     construct_create_table_query,
     construct_truncate_table_query,
     construct_insert_data_query,
     construct_drop_table_query,
 )
-
-
-@dataclass
-class SnowflakeConfig:
-    user: str
-    password: str
-    account: str
-    warehouse: str
-    database: str
-    schema: str
 
 
 TABLE_NAME: str = "RECOMMENDED_SONGS"  # The names are in uppercase in order to avoid the `Table does not exist` SQL compilation error
@@ -45,22 +41,6 @@ PYTHON_TO_SQL_TYPE_MAPPING: Dict[type, str] = {
 }
 
 
-def create_snowflake_objects(config: SnowflakeConfig, cursor: SnowflakeCursor) -> None:
-    # Create a warehouse
-    cursor.execute(f"CREATE WAREHOUSE IF NOT EXISTS {config.warehouse}")
-
-    # Create a database
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {config.database}")
-
-    # Create a schema
-    cursor.execute(f"CREATE SCHEMA IF NOT EXISTS {config.schema}")
-
-    # Use the database and schema
-    cursor.execute(f"USE DATABASE {config.database}")
-    cursor.execute(f"USE SCHEMA {config.schema}")
-    cursor.execute(f"USE WAREHOUSE {config.warehouse}")
-
-
 if __name__ == "__main__":
     # Configure Snowflake parameters
     snowflake_config = SnowflakeConfig(
@@ -72,7 +52,7 @@ if __name__ == "__main__":
         schema=SCHEMA_NAME,
     )
 
-    # Establish a connection
+    # Establish a connection to Snowflake
     snowflake_connection: SnowflakeConnection = snowflake.connector.connect(
         user=snowflake_config.user,
         password=snowflake_config.password,
@@ -82,11 +62,13 @@ if __name__ == "__main__":
         schema=snowflake_config.schema,
     )
 
-    # Create a cursor object
+    # Create a Snowflake cursor object
     snowflake_cursor: SnowflakeCursor = snowflake_connection.cursor()
 
-    # Use the cursor to object to create a database and a schema
-    create_snowflake_objects(config=snowflake_config, cursor=snowflake_cursor)
+    # Create and use Snowflake warehouse, database, schema
+    create_and_use_snowflake_warehouse(config=snowflake_config, cursor=snowflake_cursor)
+    create_and_use_snowflake_database(config=snowflake_config, cursor=snowflake_cursor)
+    create_and_use_snowflake_schema(config=snowflake_config, cursor=snowflake_cursor)
 
     # Define columns for a Snowflake table
     for field in fields(Song):
@@ -102,12 +84,12 @@ if __name__ == "__main__":
     print(f"Table `{TABLE_NAME}` created successfully.")
 
     # Retrieve recommended songs from Spotify Web API
-    recommended_songs: List[Dict] = get_recommended_songs_based_on_artists(
+    recommended_songs: List[Dict] = get_recommended_songs_based_on_other_songs(
         api_client=SPOTIFY_API_CLIENT,
-        seed_artists=list(SEED_ARTISTS.values()),
+        seed_tracks=list(SEED_TRACKS.values()),
         recommendation_size=10,
     )
-    recommended_songs_dataframe: DataFrame = construct_recommended_songs_dataframe(recommended_songs=recommended_songs)
+    recommended_songs_dataframe: pd.DataFrame = construct_recommended_songs_dataframe(recommended_songs=recommended_songs)
 
     # Upsert Spotify recommended songs to the table
     create_temp_table_query: str = construct_create_table_query(table_name=TEMP_TABLE_NAME, fields=fields_str)

@@ -1,7 +1,42 @@
-from dataclasses import fields
+from dataclasses import dataclass, fields
 from textwrap import dedent
+from snowflake.connector.cursor import SnowflakeCursor
 
 from spotify_helper_functions import Song
+
+
+@dataclass
+class SnowflakeConfig:
+    user: str
+    password: str
+    account: str
+    warehouse: str
+    database: str
+    schema: str
+
+
+def create_and_use_snowflake_warehouse(config: SnowflakeConfig, cursor: SnowflakeCursor) -> None:
+    # Create a warehouse
+    cursor.execute(f"CREATE WAREHOUSE IF NOT EXISTS {config.warehouse}")
+
+    # Use the warehouse
+    cursor.execute(f"USE WAREHOUSE {config.warehouse}")
+
+
+def create_and_use_snowflake_database(config: SnowflakeConfig, cursor: SnowflakeCursor) -> None:
+    # Create a database
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {config.database}")
+
+    # Use the database
+    cursor.execute(f"USE DATABASE {config.database}")
+
+
+def create_and_use_snowflake_schema(config: SnowflakeConfig, cursor: SnowflakeCursor) -> None:
+    # Create a schema
+    cursor.execute(f"CREATE SCHEMA IF NOT EXISTS {config.schema}")
+
+    # Use the schema
+    cursor.execute(f"USE SCHEMA {config.schema}")
 
 
 def construct_create_table_query(table_name: str, fields: str) -> str:

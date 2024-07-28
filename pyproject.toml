@@ -1,0 +1,5 @@
+[tool.flake8]
+ignore = ["E501"]
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["C0301"]
