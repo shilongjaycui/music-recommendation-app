@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import pandas as pd
 
 import spotipy
+from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 
 
@@ -41,11 +42,46 @@ CLIENT_CREDENTIALS_FLOW_MANAGER = SpotifyClientCredentials(
 SPOTIFY_API_CLIENT = spotipy.Spotify(auth_manager=CLIENT_CREDENTIALS_FLOW_MANAGER)
 
 
-if __name__ == "__main__":
-    recommended_songs: List[Dict] = SPOTIFY_API_CLIENT.recommendations(
-        seed_artists=list(SEED_ARTISTS.values()),
-        limit=100,
+def get_recommended_songs_based_on_artists(
+    api_client: Spotify,
+    seed_artists: List[str],
+    recommendation_size: int,
+) -> List[Dict]:
+    songs: List[Dict] = api_client.recommendations(
+        seed_artists=seed_artists,
+        limit=recommendation_size,
     )["tracks"]
+
+    return songs
+
+
+def get_recommended_songs_based_on_other_songs(
+    api_client: Spotify,
+    seed_tracks: List[str],
+    recommendation_size: int,
+) -> List[Dict]:
+    songs: List[Dict] = api_client.recommendations(
+        seed_tracks=seed_tracks,
+        limit=recommendation_size,
+    )["tracks"]
+
+    return songs
+
+
+def get_recommended_songs_based_on_genres(
+    api_client: Spotify,
+    seed_genres: List[str],
+    recommendation_size: int,
+) -> List[Dict]:
+    songs: List[Dict] = api_client.recommendations(
+        seed_genres=seed_genres,
+        limit=recommendation_size,
+    )["tracks"]
+
+    return songs
+
+
+def construct_recommended_songs_dataframe(recommended_songs: List[Dict]):
     songs: List[Song] = []
     for recommended_song in recommended_songs:
         songs.append(Song(
@@ -55,6 +91,8 @@ if __name__ == "__main__":
             artist_names=[artist["name"] for artist in recommended_song["artists"]],
             artist_urls=[artist["external_urls"]["spotify"] for artist in recommended_song["artists"]],
         ))
-    recommended_songs_df = pd.DataFrame([song.__dict__ for song in songs])
 
-    print(f"Recommended songs df:\n{recommended_songs_df}")
+    df = pd.DataFrame([song.__dict__ for song in songs])
+    df.columns = map(lambda x: str(x).upper(), df.columns)  # The pandas DataFrame columns must be all uppercase in order to avoid the `invalid identifier` SQL compilation error
+    print(f"recommended songs dataframe columns: {df.columns}")
+    return df

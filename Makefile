@@ -1,7 +1,7 @@
 install:
 	pip install --upgrade pip
 	pip install pandas
-	pip install snowflake-connector-python
+	pip install snowflake-connector-python[pandas]
 	pip install spotipy --upgrade
 
 connect:
