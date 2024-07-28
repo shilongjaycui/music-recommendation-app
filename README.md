@@ -5,16 +5,15 @@ Based on your 5 favorite artists/genres/songs, here are the 100 songs that you'r
 To always have 100 songs that you're like to enjoy and know how they're related to one another 🔎 🤨
 
 ## What (requirements)
-- **Data Warehouse:** Structured data of the 10,000 most popular songs on Spotify
+- **Data Warehouse:** Structured data of the recommended songs based on your seed artists/genres/songs
 - **Data Integration** Data fetching mechanism that talks to the Spotify Web API every day
-- **Data Analytics:** A playground for us to run SQL queries and answer questions about those 10,000 songs
-- **AI / ML:** Now, how are those 10,000 songs similar to and different from one another? And in what ways?
+- **AI / ML:** Now, how are those recommended songs similar to and different from one another? And in what ways?
   - maybe: integrate with [DataRobot](https://www.datarobot.com/)
 
 ## How (implementation)
 - [x] version control: Git, GitHub
-- [ ] backend: Python, [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
-- [ ] frontend: TBD
+- [x] API: Python, [Snowflake Connector for Python](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector), [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
+- [ ] UI: Streamlit in Snowflake (SiS)
 - [ ] CI/CD: GitHub Actions
   - [ ] linting: flake8
   - [ ] testing: pytest

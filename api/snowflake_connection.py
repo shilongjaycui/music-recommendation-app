@@ -1,3 +1,4 @@
+import sys
 import os
 import pandas as pd
 from typing import List, Dict
@@ -7,16 +8,23 @@ from snowflake.connector import SnowflakeConnection
 from snowflake.connector.cursor import SnowflakeCursor
 from snowflake.connector.pandas_tools import write_pandas
 
-from spotify_helper_functions import (
+# Get the directory of the current file
+current_dir = os.path.dirname(__file__)
+# Get the parent directory
+parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
+# Add the parent directory to sys.path
+sys.path.append(parent_dir)
+
+from api.spotify_helper_functions import (
     Song,
     SPOTIFY_API_CLIENT,
     SEED_ARTISTS,
-    get_recommended_songs_based_on_artists,
     SEED_TRACKS,
+    get_recommended_songs_based_on_artists,
     get_recommended_songs_based_on_other_songs,
     construct_recommended_songs_dataframe,
 )
-from sql_helper_functions import (
+from api.sql_helper_functions import (
     SnowflakeConfig,
     create_and_use_snowflake_warehouse,
     create_and_use_snowflake_database,
