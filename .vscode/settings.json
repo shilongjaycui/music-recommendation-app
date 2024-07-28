@@ -1,0 +1,11 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Args": [
+        "--config=./pyproject.toml"
+    ],
+    "python.linting.pylintArgs": [
+        "--rcfile=./pyproject.toml"
+    ]
+}
