@@ -7,7 +7,7 @@ To show off [Snowflake Connector for Python](https://docs.snowflake.com/en/devel
 ## What (demo video)
 Click the thumbnailbelow and take a look!
 
-[![Video Preview](https://select.dev/cdn-cgi/imagedelivery/1zmOcgV1p520E4lLTrYjjg/bcb881af-c434-44bd-5772-d63c0e137a00/width=3840,quality=75)](https://github.com/shilongjaycui/snowflake-demo-app/snowflake_spotipy_demo.mov)
+[![Video Preview](https://select.dev/cdn-cgi/imagedelivery/1zmOcgV1p520E4lLTrYjjg/bcb881af-c434-44bd-5772-d63c0e137a00/width=3840,quality=75)](https://github.com/shilongjaycui/snowflake-demo-app/blob/main/snowflake_spotipy_demo.mov)
 
 ## How (implementation)
 - [x] version control: Git, GitHub
