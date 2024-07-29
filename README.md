@@ -4,16 +4,20 @@ Based on your 5 favorite artists, here are the 20 songs that you're likely to al
 ## Why (purpose)
 To show off [Snowflake Connector for Python](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector) and [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
 
-## What (requirements)
-- **Data Warehouse:** Structured data of the recommended songs based on your seed artists
-- **Data Integration** Snowflake x Spotify Web API
-- **AI / ML:** Now, how are those recommended songs similar to and different from one another? And in what ways?
+## What (demo video)
+Click the thumbnailbelow and take a look!
+
+[![Video Preview](https://select.dev/cdn-cgi/imagedelivery/1zmOcgV1p520E4lLTrYjjg/bcb881af-c434-44bd-5772-d63c0e137a00/width=3840,quality=75)](https://github.com/shilongjaycui/snowflake-demo-app/snowflake_spotipy_demo.mov)
 
 ## How (implementation)
 - [x] version control: Git, GitHub
 - [x] API: Python, Snowflake Connector for Python, Spotipy
 - [x] UI: Streamlit
-- [ ] AI/ML: [DataRobot](https://www.datarobot.com/)
+- [ ] AI/ML: [Snowflake ML](https://www.snowflake.com/en/data-cloud/workloads/ai-ml/), [DataRobot](https://www.datarobot.com/)
+  - resource: [Getting Started with Snowflake ML](https://quickstarts.snowflake.com/guide/intro_to_machine_learning_with_snowpark_ml_for_python/#0)
+  - resource: [Snowflake for Data Science](https://github.com/cromano8/Snowflake_ML_Intro/blob/main/README.md)
+  - ***TODO:*** With Snowpark, develop a model, register it in the model registry and access that model through the streamlit UI.
+  - ***TODO:*** Add a video demo in which Jay articulates the business value of his solution.
 
 ## Running the web app locally
 
