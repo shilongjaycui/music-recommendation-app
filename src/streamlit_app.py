@@ -118,12 +118,12 @@ if st.session_state['recommended_songs_dataframe'] is not None:
         # Create the table
         create_table_query: str = construct_create_table_query(table_name=TABLE_NAME, fields=fields_str)
         snowflake_cursor.execute(create_table_query)
-        st.write(f"Created the `{TABLE_NAME}` Snowflake table.")
+        st.write(f"(Step 1 of 6) Created the `{TABLE_NAME}` Snowflake table.")
 
         # Upsert Spotify recommended songs to the table
         create_temp_table_query: str = construct_create_table_query(table_name=TEMP_TABLE_NAME, fields=fields_str)
         snowflake_cursor.execute(create_temp_table_query)
-        st.write(f"Created the `{TEMP_TABLE_NAME}` temporary Snowflake table.")
+        st.write(f"(Step 2 of 6) Created the `{TEMP_TABLE_NAME}` temporary Snowflake table.")
 
         write_pandas(
             conn=snowflake_connection,
@@ -132,22 +132,22 @@ if st.session_state['recommended_songs_dataframe'] is not None:
             schema=SCHEMA_NAME,
             database=DATABASE_NAME,
         )
-        st.write(f"Wrote pandas DataFrame data to `{TEMP_TABLE_NAME}`.")
+        st.write(f"(Step 3 of 6) Wrote pandas DataFrame data to `{TEMP_TABLE_NAME}`.")
         truncate_table_query: str = construct_truncate_table_query(table_name=TABLE_NAME)
         snowflake_cursor.execute(truncate_table_query)
-        st.write(f"Removed old data from `{TABLE_NAME}`.")
+        st.write(f"(Step 4 of 6) Removed old data from `{TABLE_NAME}`.")
 
         insert_data_query: str = construct_insert_data_query(table_name=TABLE_NAME, temp_table_name=TEMP_TABLE_NAME)
         snowflake_cursor.execute(insert_data_query)
-        st.write(f"Inserted new data from `{TEMP_TABLE_NAME}` to`{TABLE_NAME}`.")
+        st.write(f"(Step 5 of 6) Inserted new data from `{TEMP_TABLE_NAME}` to`{TABLE_NAME}`.")
 
         drop_temp_table_query: str = construct_drop_table_query(table_name=TEMP_TABLE_NAME)
         snowflake_cursor.execute(drop_temp_table_query)
-        st.write(f"Deleted `{TEMP_TABLE_NAME}`")
+        st.write(f"(Step 6 of 6) Deleted `{TEMP_TABLE_NAME}`")
 
         # Commit the transaction
         snowflake_connection.commit()
-        st.write("Successfully saved recommended songs to Snowflake!")
+        st.title("✅ Successfully saved recommended songs to Snowflake! ❄️")
 
         # Close the cursor and connection
         snowflake_cursor.close()
