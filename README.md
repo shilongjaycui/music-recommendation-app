@@ -5,9 +5,7 @@ Based on your 5 favorite artists, here are the 20 songs that you're likely to al
 To show off [Snowflake Connector for Python](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector) and [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
 
 ## What (demo video)
-Click the thumbnailbelow and take a look!
-
-[![Video Preview](https://select.dev/cdn-cgi/imagedelivery/1zmOcgV1p520E4lLTrYjjg/bcb881af-c434-44bd-5772-d63c0e137a00/width=3840,quality=75)](https://github.com/shilongjaycui/snowflake-demo-app/blob/main/snowflake_spotipy_demo.mov)
+Demo video is on the way!
 
 ## How (implementation)
 - [x] version control: Git, GitHub
