@@ -2,7 +2,7 @@ from dataclasses import dataclass, fields
 from textwrap import dedent
 from snowflake.connector.cursor import SnowflakeCursor
 
-from api.spotify_helper_functions import Song
+from src.spotify_helper_functions import Song
 
 
 @dataclass
