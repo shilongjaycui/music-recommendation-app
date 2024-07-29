@@ -10,14 +10,14 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 @dataclass
 class Artist:
-    name: str
-    genres: List[str]
-    image_url: str
+    artist_name: str
+    artist_genres: List[str]
+    artist_image_url: str
 
 
 @dataclass
 class Song:
-    name: str
+    song_name: str
     song_url: str
     song_popularity: int
     artist_names: List[str]
@@ -54,9 +54,9 @@ def get_several_artists(api_client: Spotify, spotify_urls: List[str]) -> List[Ar
     artists = []
     for artist_json in artist_list:
         artist = Artist(
-            name=artist_json["name"],
-            genres=artist_json["genres"],
-            image_url=artist_json["images"][0]["url"],
+            artist_name=artist_json["name"],
+            artist_genres=artist_json["genres"],
+            artist_image_url=artist_json["images"][0]["url"],
         )
         artists.append(artist)
     return artists
@@ -68,7 +68,7 @@ def get_several_tracks(api_client: Spotify, spotify_urls: List[str]) -> List[Son
     tracks: List[Song] = []
     for track_json in track_list:
         track = Song(
-            name=track_json["name"],
+            song_name=track_json["name"],
             song_url=track_json["external_urls"]["spotify"],
             song_popularity=track_json["popularity"],
             artist_names=[artist["name"] for artist in track_json["artists"]],
@@ -106,16 +106,8 @@ def get_recommended_songs_based_on_other_songs(
 
 
 def construct_recommended_songs_dataframe(recommended_songs: List[Dict]):
-    songs: List[Song] = []
-    for recommended_song in recommended_songs:
-        songs.append(Song(
-            name=recommended_song["name"],
-            song_url=recommended_song["external_urls"]["spotify"],
-            song_popularity=recommended_song["popularity"],
-            artist_names=[artist["name"] for artist in recommended_song["artists"]],
-            artist_urls=[artist["external_urls"]["spotify"] for artist in recommended_song["artists"]],
-            album_image_url=recommended_song["album"]["images"][0]["url"],
-        ))
+    recommended_songs_urls: List[str] = [recommended_song["external_urls"]["spotify"] for recommended_song in recommended_songs]
+    songs: List[Song] = get_several_tracks(api_client=SPOTIFY_API_CLIENT, spotify_urls=recommended_songs_urls)
 
     df = pd.DataFrame([song.__dict__ for song in songs])
     df.columns = map(lambda x: str(x).upper(), df.columns)  # The pandas DataFrame columns must be all uppercase in order to avoid the `invalid identifier` SQL compilation error

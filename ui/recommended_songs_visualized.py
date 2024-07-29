@@ -18,14 +18,14 @@ from api.spotify_helper_functions import (  # pylint: disable=C0413
 
 
 def display_artist(artist: Artist):
-    st.image(artist.image_url, use_column_width=True)
-    st.markdown(f"### {artist.name}")
-    st.markdown(", ".join(artist.genres))
+    st.image(artist.artist_image_url, use_column_width=True)
+    st.markdown(f"### {artist.artist_name}")
+    st.markdown(", ".join(artist.artist_genres))
 
 
 def display_song(song: Song):
     st.image(song.album_image_url, use_column_width=True)
-    st.markdown(f"### {song.name}")
+    st.markdown(f"### {song.song_name}")
     st.markdown(", ".join(song.artist_names))
 
 

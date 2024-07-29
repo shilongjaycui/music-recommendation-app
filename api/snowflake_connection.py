@@ -79,12 +79,10 @@ if __name__ == "__main__":
     create_and_use_snowflake_schema(config=snowflake_config, cursor=snowflake_cursor)
 
     # Define columns for a Snowflake table
-    for field in fields(Song):
-        print(f"{field.name} {field.type}")
     fields_str: str = ",\n\t".join(
         f"{field.name} {PYTHON_TO_SQL_TYPE_MAPPING[field.type]}" for field in fields(Song)
     )
-    print(f"fields list: {fields_str}")
+    print(f"fields_str: {fields_str}")
 
     # Create the table
     create_table_query: str = construct_create_table_query(table_name=TABLE_NAME, fields=fields_str)
