@@ -33,14 +33,6 @@ SEED_ARTISTS: Dict[str, str] = {
     "Shakira": "https://open.spotify.com/artist/0EmeFodog0BfCgMzAIvKQp",
 }
 
-SEED_TRACKS: Dict[str, str] = {
-    "Hawái": "https://open.spotify.com/track/1yoMvmasuxZfqHEipJhRbp",
-    "BELLAKEO": "https://open.spotify.com/track/5Fohh8kl8403DSoq4KH7Ll",
-    "X": "https://open.spotify.com/track/5YUyW9opqNsMSEzzecZih1",
-    "Con Calma": "https://open.spotify.com/track/5w9c2J52mkdntKOmRLeM2m",
-    "TQG": "https://open.spotify.com/track/0DWdj2oZMBFSzRsi2Cvfzf",
-}
-
 CLIENT_CREDENTIALS_FLOW_MANAGER = SpotifyClientCredentials(
     client_id=os.environ["SPOTIPY_CLIENT_ID"],
     client_secret=os.environ["SPOTIPY_CLIENT_SECRET"],
@@ -86,19 +78,6 @@ def get_recommended_songs_based_on_artists(
 ) -> List[Dict]:
     songs: List[Dict] = api_client.recommendations(
         seed_artists=seed_artists,
-        limit=recommendation_size,
-    )["tracks"]
-
-    return songs
-
-
-def get_recommended_songs_based_on_other_songs(
-    api_client: Spotify,
-    seed_tracks: List[str],
-    recommendation_size: int,
-) -> List[Dict]:
-    songs: List[Dict] = api_client.recommendations(
-        seed_tracks=seed_tracks,
         limit=recommendation_size,
     )["tracks"]
 

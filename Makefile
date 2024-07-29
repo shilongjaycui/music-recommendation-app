@@ -5,8 +5,5 @@ install:
 	pip install spotipy --upgrade
 	pip install streamlit
 
-upsert:
-	python src/snowflake_connection.py
-
 run:
 	streamlit run src/streamlit_app.py
