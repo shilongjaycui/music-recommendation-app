@@ -1,19 +1,19 @@
 # `snowflake-demo-app`
-Based on your 5 favorite artists/genres/songs, here are the 100 songs that you're likely to also enjoy!
+Based on your 5 favorite artists, here are the 20 songs that you're likely to also enjoy!
 
 ## Why (purpose)
-To always have 100 songs that you're like to enjoy and know how they're related to one another 🔎 🤨
+To show off [Snowflake Connector for Python](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector) and [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
 
 ## What (requirements)
-- **Data Warehouse:** Structured data of the recommended songs based on your seed artists/genres/songs
-- **Data Integration** Data fetching mechanism that talks to the Spotify Web API every day
+- **Data Warehouse:** Structured data of the recommended songs based on your seed artists
+- **Data Integration** Snowflake x Spotify Web API
 - **AI / ML:** Now, how are those recommended songs similar to and different from one another? And in what ways?
-  - maybe: integrate with [DataRobot](https://www.datarobot.com/)
 
 ## How (implementation)
 - [x] version control: Git, GitHub
-- [x] API: Python, [Snowflake Connector for Python](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector), [Spotipy](https://github.com/spotipy-dev/spotipy) (a lightweight Python library for the [Spotify Web API](https://developer.spotify.com/documentation/web-api))
+- [x] API: Python, Snowflake Connector for Python, Spotipy
 - [x] UI: Streamlit
+- [ ] AI/ML: [DataRobot](https://www.datarobot.com/)
 
 ## Running the web app locally
 
