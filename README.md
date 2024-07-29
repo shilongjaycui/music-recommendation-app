@@ -53,8 +53,8 @@ To show off [Snowflake Connector for Python](https://docs.snowflake.com/en/devel
    ```
    and you should see the following environment variables show up:
    ```
-   SPOTIPY_CLIENT_ID=32078d4251cb4872a344eb3ba072040e
-   SPOTIPY_CLIENT_SECRET=00d8f6c2568f422ca38b7f85c283df86
+   SPOTIPY_CLIENT_ID=<your-spotify-client-id>
+   SPOTIPY_CLIENT_SECRET=<your-spotify-client-secret>
    ```
 8. Run the Streamlit app:
    ```
